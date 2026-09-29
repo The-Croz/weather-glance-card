@@ -8,6 +8,8 @@ A native-looking Home Assistant weather card: clock, current conditions, air qua
 
 Built for [Pirate Weather](https://github.com/Pirate-Weather/pirate-weather-ha), but works with any `weather` entity that supports hourly and daily forecasts.
 
+![Weather Glance Card — Wide layout, dark theme, with a severe weather alert](https://raw.githubusercontent.com/The-Croz/weather-glance-card/main/images/layout-wide-dark.png)
+
 ## Features
 
 - **Four layouts** — **Full stack**, **Wide panel**, **Condensed** (wide but short — great for tablet dashboards), **Compact** — or **Auto**, which switches to Wide when the card is at least 720px wide
@@ -18,6 +20,27 @@ Built for [Pirate Weather](https://github.com/Pirate-Weather/pirate-weather-ha),
 - **Tap a day** to see that day's hourly forecast
 - Localized times, dates and condition names; respects your 12/24-hour and time zone settings
 - Full visual editor — no YAML required
+
+## Layouts
+
+<table>
+  <tr>
+    <th width="50%">Full stack</th>
+    <th width="50%">Compact</th>
+  </tr>
+  <tr>
+    <td valign="top"><img src="https://raw.githubusercontent.com/The-Croz/weather-glance-card/main/images/layout-full-light.png" alt="Full stack layout, light theme, with rain nowcast"></td>
+    <td valign="top"><img src="https://raw.githubusercontent.com/The-Croz/weather-glance-card/main/images/layout-compact-dark.png" alt="Compact layout, dark theme, with a severe weather alert"></td>
+  </tr>
+</table>
+
+**Wide panel** — shown at the top of this page. Stat rows on the left; hourly temperature/precipitation chart and daily tiles on the right.
+
+**Condensed** — wide but short: the header, stat chips, an hourly strip and a row of daily tiles. Built for tablet dashboards.
+
+![Condensed layout, light theme, with rain nowcast](https://raw.githubusercontent.com/The-Croz/weather-glance-card/main/images/layout-condensed-light.png)
+
+<sub>Screenshots use sample data.</sub>
 
 ## Requirements
 
