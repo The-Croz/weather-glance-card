@@ -192,7 +192,7 @@ class WeatherGlanceCard extends HTMLElement {
     this._unsubscribe();
     const conn = this._hass?.connection, id = this._config?.entity;
     if (!conn || !id || !this.isConnected) return;
-    const sub = type => conn.subscribeMessage(ev => { this['_' + type] = ev.forecast || []; this._render(); }, { type: 'weather/subscribe_forecast', forecast_type: type, entity_id: id }).catch(() => null);
+    const sub = type => conn.subscribeMessage(ev => { if (this._config?.entity !== id) return; this['_' + type] = ev.forecast || []; this._render(); }, { type: 'weather/subscribe_forecast', forecast_type: type, entity_id: id }).catch(() => null);
     this._subs = [sub('hourly'), sub('daily')];
   }
   _unsubscribe() { (this._subs || []).forEach(p => p.then(u => { try { u && u(); } catch (e) { } })); this._subs = []; }
@@ -228,8 +228,8 @@ class WeatherGlanceCard extends HTMLElement {
     return this._hass?.themes?.darkMode ?? true;
   }
   _layout() {
-    const l = this._config?.layout || 'auto';
-    if (l !== 'auto') return l;
+    const l = this._config?.layout;
+    if (l === 'full' || l === 'wide' || l === 'compact') return l;
     return (this._w || this.offsetWidth || 400) >= 720 ? 'wide' : 'full';
   }
 
@@ -267,7 +267,7 @@ class WeatherGlanceCard extends HTMLElement {
       const desc = x.Description || x.description || '';
       const instr = x.Instruction || x.instruction || '';
       const hz = desc.match(/HAZARD\.\.\.([\s\S]*?)(\n\n|SOURCE\.\.\.|IMPACT\.\.\.|$)/i);
-      const summary = (hz ? hz[1] : (desc.split(/(?<=\.)\s/)[0] || '')).replace(/\s+/g, ' ').trim().slice(0, 160);
+      const summary = (hz ? hz[1] : (desc.match(/^[\s\S]*?\.(?=\s|$)/)?.[0] || desc)).replace(/\s+/g, ' ').trim().slice(0, 160);
       const ex = new Date(x.Ends || x.Expires || x.ends || x.expires || '');
       let until = '';
       if (!isNaN(ex)) until = 'Until ' + (this._dayKey(ex) === this._dayKey(new Date()) ? this._time(ex) : this._fmt(ex, { weekday: 'short', hour: 'numeric', minute: '2-digit' }));
@@ -329,7 +329,7 @@ class WeatherGlanceCard extends HTMLElement {
     const lows = daily.map(d => d.templow ?? d.temperature), highs = daily.map(d => d.temperature);
     const wMin = Math.min(...lows), wMax = Math.max(...highs), span = wMax - wMin || 1;
     const mkHour = (h, i, first) => { const d = new Date(h.datetime), cd = this._cond(h.condition, this._isNight(d, sun)); const pop = num(h.precipitation_probability) ?? 0; return { t: first && i === 0 ? 'Now' : this._hourLabel(d), ...cd, temp: h.temperature, pop, now: first && i === 0 }; };
-    const days = daily.map((d, i) => { const key = this._dayKey(new Date(d.datetime)); const lo = d.templow ?? d.temperature; return { i, key, dn: key === todayKey ? 'Today' : this._fmt(new Date(d.datetime), { weekday: 'short' }), ...this._cond(d.condition, false), hi: d.temperature, lo: d.templow, pop: num(d.precipitation_probability) ?? 0, left: ((lo - wMin) / span * 100).toFixed(1), width: Math.max(4, (d.temperature - lo) / span * 100).toFixed(1), raw: d }; });
+    const days = daily.map((d, i) => { const key = this._dayKey(new Date(d.datetime)); const lo = d.templow ?? d.temperature; return { i, key, dn: key === todayKey ? 'Today' : this._fmt(new Date(d.datetime), { weekday: 'short' }), ...this._cond(d.condition, false), hi: d.temperature, lo: d.templow, pop: num(d.precipitation_probability) ?? 0, left: Math.min(96, (lo - wMin) / span * 100).toFixed(1), width: Math.max(4, (d.temperature - lo) / span * 100).toFixed(1), raw: d }; });
     const hoursForDay = i => { const d = days[i]; if (!d) return []; const list = hourlyAll.filter(h => this._dayKey(new Date(h.datetime)) === d.key); return list.map((h, j) => mkHour(h, j, i === 0)); };
     const hours = hourlyAll.slice(0, c.hourly_count).map((h, i) => mkHour(h, i, true));
     const today = daily[0];
@@ -480,7 +480,7 @@ class WeatherGlanceCard extends HTMLElement {
     if (!list.length) return;
     this._dlg.innerHTML = `<div class="dh"><span>Weather alerts</span><button class="x" data-action="close" aria-label="Close">${this._icon('mdi:close')}</button></div>
       <div class="dbody">${list.map(a => { const L = LVL[a.level]; return `<div class="ai"><div class="ah" style="background:${L.bg};color:${L.fg}">${this._icon('mdi:alert')}<div><b>${esc(a.event)}</b><span>${esc([a.until, a.sev].filter(Boolean).join(' · '))}</span></div></div>
-        ${a.areas ? `<h4>Areas</h4><p>${esc(a.areas)}</p>` : ''}${a.desc ? `<h4>Details</h4><p>${esc(a.desc.trim())}</p>` : ''}${a.instr ? `<h4>What to do</h4><p>${esc(a.instr.trim())}</p>` : ''}${a.url ? `<a href="${esc(a.url)}" target="_blank" rel="noopener">Open full alert</a>` : ''}</div>`; }).join('')}</div>`;
+        ${a.areas ? `<h4>Areas</h4><p>${esc(a.areas)}</p>` : ''}${a.desc ? `<h4>Details</h4><p>${esc(a.desc.trim())}</p>` : ''}${a.instr ? `<h4>What to do</h4><p>${esc(a.instr.trim())}</p>` : ''}${/^https?:\/\//i.test(a.url) ? `<a href="${esc(a.url)}" target="_blank" rel="noopener">Open full alert</a>` : ''}</div>`; }).join('')}</div>`;
     if (!this._dlg.open) this._dlg.showModal();
   }
 }
@@ -566,5 +566,5 @@ class WeatherGlanceCardEditor extends HTMLElement {
 if (!customElements.get('weather-glance-card')) customElements.define('weather-glance-card', WeatherGlanceCard);
 if (!customElements.get('weather-glance-card-editor')) customElements.define('weather-glance-card-editor', WeatherGlanceCardEditor);
 window.customCards = window.customCards || [];
-if (!window.customCards.some(c => c.type === 'weather-glance-card')) window.customCards.push({ type: 'weather-glance-card', name: 'Weather Glance Card', description: 'Clock, conditions, air quality, alerts, hourly and daily forecast at a glance.', preview: true, documentationURL: 'https://github.com/' });
+if (!window.customCards.some(c => c.type === 'weather-glance-card')) window.customCards.push({ type: 'weather-glance-card', name: 'Weather Glance Card', description: 'Clock, conditions, air quality, alerts, hourly and daily forecast at a glance.', preview: true, documentationURL: 'https://github.com/The-Croz/weather-glance-card' });
 console.info(`%c WEATHER-GLANCE-CARD %c v${WGC_VERSION} `, 'background:#03a9f4;color:#fff;font-weight:700', 'background:#1c1c1c;color:#fff');
