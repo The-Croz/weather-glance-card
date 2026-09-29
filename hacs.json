@@ -2,5 +2,5 @@
   "name": "Weather Glance Card",
   "filename": "weather-glance-card.js",
   "render_readme": true,
-  "homeassistant": "2024.4.0"
+  "homeassistant": "2025.4.0"
 }
