@@ -1,5 +1,5 @@
-/*! Weather Glance Card v1.0.0 — Home Assistant custom card */
-const WGC_VERSION = '1.0.0';
+/*! Weather Glance Card v1.1.0 — Home Assistant custom card */
+const WGC_VERSION = '1.1.0';
 
 const DEFAULTS = {
   layout: 'auto', theme: 'auto',
@@ -53,7 +53,7 @@ ha-card{overflow:hidden;height:100%;box-sizing:border-box}
 .tap:focus-visible{outline:2px solid var(--primary-color);outline-offset:2px}
 .warn{padding:16px;color:var(--error-color,#db4437)}
 .top{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 16px 0;gap:12px}
-.time{display:flex;align-items:baseline;gap:4px}.hm{font-size:28px;letter-spacing:-.5px}.ap{font-size:13px;font-weight:500;color:var(--secondary-text-color)}
+.time{display:flex;align-items:baseline;gap:4px}.hm{font-size:28px;font-weight:600;letter-spacing:-.5px}.ap{font-size:13px;font-weight:500;color:var(--secondary-text-color)}
 .date{font-size:13px;color:var(--secondary-text-color);margin-top:2px}
 .loc{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--secondary-text-color);padding-top:6px;--mdc-icon-size:15px;white-space:nowrap}
 .hero{display:flex;align-items:center;gap:14px;padding:14px 16px 4px;border-radius:12px}
@@ -91,13 +91,17 @@ ha-card{overflow:hidden;height:100%;box-sizing:border-box}
 .ab{padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:6px;line-height:1.4}
 .meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--secondary-text-color);--mdc-icon-size:15px}.meta span{display:flex;align-items:center;gap:4px}
 .abar{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 10px;border-radius:10px;--mdc-icon-size:18px}.abar b{flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wide{display:grid;grid-template-columns:300px minmax(0,1fr)}
-.wide .left{padding:20px;border-right:1px solid var(--div);display:flex;flex-direction:column;gap:18px}
-.wide .hm{font-size:56px;font-weight:300;letter-spacing:-2px;line-height:1}.wide .ap{font-size:16px}.wide .date{font-size:14px}
-.wide .hero{padding:0;gap:12px}.wide .hero-icon{--mdc-icon-size:56px}.wide .temp{font-size:40px;letter-spacing:-1px}
+.wide{display:grid;grid-template-columns:280px minmax(0,1fr)}
+.whead{grid-column:1/-1;display:flex;align-items:center;gap:20px;padding:18px 20px 16px;border-bottom:1px solid var(--div);min-width:0}
+.whead .hm{font-size:48px;font-weight:700;letter-spacing:-1.5px;line-height:1}.whead .ap{font-size:16px;font-weight:600}.whead .date{font-size:14px;margin-top:4px;white-space:nowrap}
+.vr{width:1px;align-self:stretch;background:var(--div);flex:none}
+.cur{display:flex;align-items:center;gap:12px;min-width:0;border-radius:12px}.cur .hero-icon{--mdc-icon-size:52px}
+.cur .temp{font-size:48px;font-weight:400;letter-spacing:-1.5px}.cur .txt{min-width:0}.cur .cond{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cur .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.whead .loc{margin-left:auto;align-self:flex-start;padding-top:2px;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.wide .left{padding:12px 20px 16px;border-right:1px solid var(--div);display:flex;flex-direction:column;gap:18px}
 .row{display:flex;align-items:center;gap:10px;height:34px;border-bottom:1px solid var(--div);--mdc-icon-size:18px}.row ha-icon{color:var(--secondary-text-color)}
 .row .l{flex:1;font-size:13px;color:var(--secondary-text-color)}.row .v{font-size:14px;font-weight:500}.row .s{font-size:12px;min-width:64px;text-align:right;color:var(--secondary-text-color)}
-.wide .right{padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.wide .right{padding:16px 20px 20px;display:flex;flex-direction:column;gap:16px;min-width:0}
 .wide .alert,.wide .banner{margin:0}.wide .h{padding:0 0 8px}
 .chart{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(46px,1fr);overflow-x:auto;background:var(--tile);border-radius:10px;padding:10px 4px;scrollbar-width:none}
 .col{display:flex;flex-direction:column;align-items:center;--mdc-icon-size:22px}.col .t{font-size:11px;color:var(--secondary-text-color);white-space:nowrap}.col ha-icon{margin-top:4px}
@@ -123,6 +127,12 @@ ha-card{overflow:hidden;height:100%;box-sizing:border-box}
 .compact .strip{padding:0;gap:6px;grid-auto-columns:52px}.compact .hr{padding:8px 0;border-radius:10px}.compact .hr.now{background:var(--tile)}
 .compact .days{padding:0}.compact .day{grid-template-columns:48px 28px 40px 32px minmax(0,1fr) 32px;height:36px}
 .compact .h{padding:0}
+.condensed{padding:16px;display:flex;flex-direction:column;gap:12px}
+.condensed .whead{padding:0;border:none}
+.condensed .strip{padding:0;gap:4px;grid-auto-columns:minmax(50px,1fr)}.condensed .hr{padding:6px 0;border-radius:10px}.condensed .hr.now{background:var(--tile)}
+.condensed .h{padding:0}
+.drow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(58px,1fr);gap:6px;overflow-x:auto;scrollbar-width:none}.drow::-webkit-scrollbar{display:none}
+.drow .dt{padding:8px 4px;gap:3px;--mdc-icon-size:24px}.drow .hl{font-size:13px;white-space:nowrap}.drow .hl b{font-size:15px;font-weight:500}.drow .hl span{color:var(--secondary-text-color)}
 dialog{border:none;border-radius:16px;padding:0;width:min(560px,calc(100vw - 32px));max-height:80vh;background:var(--ha-card-background,var(--card-background-color,#fff));color:var(--primary-text-color);box-shadow:0 8px 32px rgba(0,0,0,.4)}
 dialog::backdrop{background:rgba(0,0,0,.55)}
 .dh{display:flex;align-items:center;justify-content:space-between;padding:14px 12px 8px 16px;font-size:18px;font-weight:500}
@@ -145,6 +155,8 @@ class WeatherGlanceCard extends HTMLElement {
     if (nws) cfg.alerts_entity = nws;
     const mins = ids.find(e => /^sensor\..*minutely_summary$/.test(e));
     if (mins) cfg.nowcast_entity = mins;
+    const uv = ids.find(e => /^sensor\..*uv_index$/.test(e));
+    if (uv) cfg.uv_entity = uv;
     return cfg;
   }
 
@@ -161,11 +173,11 @@ class WeatherGlanceCard extends HTMLElement {
     const old = this._hass; this._hass = h;
     if (!this._config) return;
     if (!this._subs?.length) this._subscribe();
-    const c = this._config, keys = [c.entity, c.aqi_entity, c.alerts_entity, c.nowcast_entity, c.storm_distance_entity, c.storm_bearing_entity, 'sun.sun'];
+    const c = this._config, keys = [c.entity, c.aqi_entity, c.alerts_entity, c.nowcast_entity, c.storm_distance_entity, c.storm_bearing_entity, c.uv_entity, 'sun.sun'];
     if (!old || old.themes?.darkMode !== h.themes?.darkMode || keys.some(k => k && old.states[k] !== h.states[k])) this._render();
   }
 
-  getCardSize() { return this._layout() === 'compact' ? 5 : 9; }
+  getCardSize() { return { compact: 5, condensed: 6 }[this._layout()] || 9; }
   getGridOptions() {
     return this._config?.layout === 'wide' ? { columns: 'full', min_columns: 12, rows: 'auto' } : { columns: 12, min_columns: 6, rows: 'auto' };
   }
@@ -229,7 +241,7 @@ class WeatherGlanceCard extends HTMLElement {
   }
   _layout() {
     const l = this._config?.layout;
-    if (l === 'full' || l === 'wide' || l === 'compact') return l;
+    if (l === 'full' || l === 'wide' || l === 'compact' || l === 'condensed') return l;
     return (this._w || this.offsetWidth || 400) >= 720 ? 'wide' : 'full';
   }
 
@@ -298,16 +310,19 @@ class WeatherGlanceCard extends HTMLElement {
     if (i > 0) { const h = hours[i]; return { title: `${word(h)} likely around ${this._hourLabel(new Date(h.datetime))}`, sub: `${r(h.precipitation_probability)}% chance${h.precipitation ? ` · ${h.precipitation} ${this._unitP || ''}` : ''}` }; }
     return null;
   }
-  _stats(a, dark, sun, today) {
+  _stats(a, dark, sun, today, hour) {
     const k = dark ? 2 : 3, sec = 'var(--secondary-text-color)', out = [];
     const ws = a.wind_speed_unit || '';
     const aqiE = this._config.aqi_entity && this._hass.states[this._config.aqi_entity];
+    // Pirate Weather has no current UV on the weather entity, only in forecasts
+    const uvE = this._config.uv_entity && this._hass.states[this._config.uv_entity];
+    const uv = num(uvE?.state) ?? num(a.uv_index) ?? num(hour?.uv_index);
     for (const key of this._config.stats || []) {
       let s = null;
       if (key === 'humidity' && a.humidity != null) s = { icon: 'mdi:water-percent', label: 'Humidity', value: `${r(a.humidity)}%`, sub: a.dew_point != null ? `Dew point ${r(a.dew_point)}°` : '', chip: `${r(a.humidity)}%`, chipColor: 'var(--rain)' };
       if (key === 'aqi' && aqiE && num(aqiE.state) != null) { const v = num(aqiE.state), b = band(AQI, v); s = { icon: 'mdi:leaf', label: 'Air quality', value: `${r(v)}`, sub: b[1], subColor: b[k], chip: `AQI ${r(v)}`, chipColor: b[k] }; }
       if (key === 'wind' && a.wind_speed != null) { const v = `${r(a.wind_speed)} ${ws} ${cardinal(a.wind_bearing)}`.trim(); s = { icon: 'mdi:weather-windy', label: 'Wind', value: v, sub: a.wind_gust_speed != null ? `Gusts ${r(a.wind_gust_speed)} ${ws}` : '', chip: v, chipColor: 'var(--cloud)' }; }
-      if (key === 'uv' && a.uv_index != null) { const b = band(UV, num(a.uv_index)); s = { icon: 'mdi:white-balance-sunny', label: 'UV index', value: `${r(a.uv_index)}`, sub: b[1], subColor: b[k], chip: `UV ${r(a.uv_index)}`, chipColor: b[k] }; }
+      if (key === 'uv' && uv != null) { const b = band(UV, uv); s = { icon: 'mdi:white-balance-sunny', label: 'UV index', value: `${r(uv)}`, sub: b[1], subColor: b[k], chip: `UV ${r(uv)}`, chipColor: b[k] }; }
       if (key === 'pressure' && a.pressure != null) { const u = a.pressure_unit || '', v = /inhg/i.test(u) ? Number(a.pressure).toFixed(2) : r(a.pressure); s = { icon: 'mdi:gauge', label: 'Pressure', value: `${v} ${u}`, sub: '', chip: `${v} ${u}`, chipColor: 'var(--cloud)' }; }
       if (key === 'sun' && sun) { const first = sun.up ? ['Sunset', sun.set, 'Sunrise', sun.rise] : ['Sunrise', sun.rise, 'Sunset', sun.set]; s = { icon: sun.up ? 'mdi:weather-sunset-down' : 'mdi:weather-sunset-up', label: first[0], value: this._time(first[1]), sub: `${first[2]} ${this._time(first[3])}`, chip: this._time(first[1]), chipColor: '#ff8a65' }; }
       if (key === 'dew_point' && a.dew_point != null) s = { icon: 'mdi:thermometer-water', label: 'Dew point', value: `${r(a.dew_point)}°`, sub: '', chip: `Dew ${r(a.dew_point)}°`, chipColor: 'var(--rain)' };
@@ -341,7 +356,7 @@ class WeatherGlanceCard extends HTMLElement {
       updated: isNaN(updatedMin) ? '' : updatedMin < 1 ? 'just now' : updatedMin < 60 ? `${updatedMin} min ago` : `${Math.round(updatedMin / 60)} h ago`,
       cur: { ...this._cond(st.state, nightNow), temp: a.temperature, unit: a.temperature_unit || '°', feels: a.apparent_temperature, hi: today?.temperature, lo: today?.templow },
       alerts: this._alerts(), storm: this._storm(), nowcast: this._nowcast(hourlyAll),
-      stats: c.show_stats ? this._stats(a, dark, sun, today) : [],
+      stats: c.show_stats ? this._stats(a, dark, sun, today, hourlyAll[0]) : [],
       hours, days, hoursForDay, hasHourlyData: hourlyAll.length > 0,
     };
   }
@@ -363,6 +378,14 @@ class WeatherGlanceCard extends HTMLElement {
   _btn(action, extra = '') { return `data-action="${action}" role="button" tabindex="0" ${extra}`; }
   _popTxt(p) { return p >= 10 ? `${r(p)}%` : ''; }
   _tempLine(m) { return `Feels like ${r(m.cur.feels ?? m.cur.temp)}°${m.cur.hi != null ? ` · H ${r(m.cur.hi)}° L ${r(m.cur.lo)}°` : ''}`; }
+
+  _head(m, loc) {
+    const c = this._config;
+    const clock = c.show_clock ? `<div><div class="time"><span class="hm">${esc(m.clock.hm)}</span><span class="ap">${esc(m.clock.ap)}</span></div><div class="date">${esc(m.clock.date)}</div></div><div class="vr"></div>` : '';
+    const hl = m.cur.hi != null ? ` · H ${r(m.cur.hi)}° L ${r(m.cur.lo)}°` : '';
+    const where = loc && (m.name || m.updated) ? `<div class="loc">${m.name ? this._icon('mdi:home-outline') + esc(m.name) + (m.updated ? ' · ' : '') : ''}${esc(m.updated)}</div>` : '';
+    return `<div class="whead">${clock}<div class="cur tap" ${this._btn('more-info')}>${this._icon(m.cur.icon, 'hero-icon t-' + m.cur.tone)}<div class="temp">${r(m.cur.temp)}°</div><div class="txt"><div class="cond">${esc(m.cur.label)}</div><div class="sub">Feels ${r(m.cur.feels ?? m.cur.temp)}°${hl}</div></div></div>${where}</div>`;
+  }
 
   _alertBlock(m) {
     if (!m.alerts.length) return '';
@@ -418,24 +441,24 @@ class WeatherGlanceCard extends HTMLElement {
       </div>
       ${this._alertBlock(m)}${this._banner(m)}
       ${m.stats.length ? `<div class="stats">${m.stats.map(s => `<div class="stat"><div class="lb">${this._icon(s.icon)}${esc(s.label)}</div><span class="v">${esc(s.value)}</span><span class="s" style="color:${s.subColor}">${esc(s.sub)}</span></div>`).join('')}</div>` : ''}
-      ${c.show_hourly ? `<div class="h"><span>Next ${m.hours.length} hours</span></div>${this._strip(m.hours, true)}` : ''}
+      ${c.show_hourly ? `<div class="h"><span>Hourly</span></div>${this._strip(m.hours, true)}` : ''}
       ${c.show_daily && m.days.length ? `<div class="divider"></div><div class="days">${this._dayRows(m, true)}</div>` : '<div style="height:14px"></div>'}`;
   }
 
   _wide(m) {
     const c = this._config, fh = this._filteredHours(m), hs = fh.hours;
     const temps = hs.map(h => h.temp), tMax = Math.max(...temps), tMin = Math.min(...temps), rng = tMax - tMin || 1;
-    const chart = hs.length ? `<div class="chart">${hs.map(h => `<div class="col"><span class="t">${esc(h.t)}</span>${this._icon(h.icon, 't-' + h.tone)}<div class="curve"><div style="top:${((tMax - h.temp) / rng * 26).toFixed(1)}px"><span>${r(h.temp)}°</span><span class="dot"></span></div></div><div class="pb"><i style="height:${h.pop}%"></i></div><span class="pop">${this._popTxt(h.pop)}</span></div>`).join('')}</div>` : `<div class="note">${fh.note || 'Hourly forecast unavailable'}</div>`;
+    const wet = hs.some(h => h.pop >= 10);
+    const chart = hs.length ? `<div class="chart">${hs.map(h => `<div class="col"><span class="t">${esc(h.t)}</span>${this._icon(h.icon, 't-' + h.tone)}<div class="curve"><div style="top:${((tMax - h.temp) / rng * 26).toFixed(1)}px"><span>${r(h.temp)}°</span><span class="dot"></span></div></div>${wet ? `<div class="pb"><i style="height:${h.pop}%"></i></div><span class="pop">${this._popTxt(h.pop)}</span>` : ''}</div>`).join('')}</div>` : `<div class="note">${fh.note || 'Hourly forecast unavailable'}</div>`;
     return `
+      ${this._head(m, true)}
       <div class="left">
-        ${c.show_clock ? `<div><div class="time"><span class="hm">${esc(m.clock.hm)}</span><span class="ap">${esc(m.clock.ap)}</span></div><div class="date">${esc(m.clock.date)}</div></div>` : ''}
-        <div class="hero tap" ${this._btn('more-info')}>${this._icon(m.cur.icon, 'hero-icon t-' + m.cur.tone)}<div><div class="temp">${r(m.cur.temp)}°</div><div class="sub">${esc(m.cur.label)} · Feels ${r(m.cur.feels ?? m.cur.temp)}°</div></div></div>
         ${m.stats.length ? `<div class="rows">${m.stats.map(s => `<div class="row">${this._icon(s.icon)}<span class="l">${esc(s.label)}</span><span class="v">${esc(s.value)}</span><span class="s" style="color:${s.subColor}">${esc(s.sub)}</span></div>`).join('')}</div>` : ''}
       </div>
       <div class="right">
         ${this._alertBlock(m)}${this._banner(m)}
         ${c.show_hourly ? `<div><div class="h"><span>Hourly</span>${this._clearChip(m)}</div>${chart}</div>` : ''}
-        ${c.show_daily && m.days.length ? `<div><div class="h"><span>${m.days.length} days</span></div><div class="dgrid">${m.days.map(d => `<div class="dt tap${this._dayFilter === d.i ? ' sel' : ''}" ${this._btn('day', `data-i="${d.i}"`)}><span class="dn">${esc(d.dn)}</span>${this._icon(d.icon, 't-' + d.tone)}<span class="hi">${r(d.hi)}°</span><span class="lo">${r(d.lo)}°</span><span class="pop">${this._popTxt(d.pop)}</span></div>`).join('')}</div></div>` : ''}
+        ${c.show_daily && m.days.length ? `<div><div class="h"><span>Daily</span></div><div class="dgrid">${m.days.map(d => `<div class="dt tap${this._dayFilter === d.i ? ' sel' : ''}" ${this._btn('day', `data-i="${d.i}"`)}><span class="dn">${esc(d.dn)}</span>${this._icon(d.icon, 't-' + d.tone)}<span class="hi">${r(d.hi)}°</span><span class="lo">${r(d.lo)}°</span><span class="pop">${this._popTxt(d.pop)}</span></div>`).join('')}</div></div>` : ''}
       </div>`;
   }
 
@@ -453,9 +476,21 @@ class WeatherGlanceCard extends HTMLElement {
       ${m.stats.length ? `<div class="chips">${m.stats.map(s => `<div class="chip">${this._icon(s.icon).replace('<ha-icon', `<ha-icon style="color:${s.chipColor}"`)}${esc(s.chip)}</div>`).join('')}</div>` : ''}
       ${this._alertBar(m)}
       ${!m.alerts.length && m.nowcast ? `<div class="cnow">${this._icon('mdi:umbrella-outline')}${esc(m.nowcast.title)}${m.nowcast.sub ? ' · ' + esc(m.nowcast.sub) : ''}</div>` : ''}
-      ${both ? `<div class="tabs"><div class="tab tap${tab === 'hourly' ? ' on' : ''}" ${this._btn('tab', 'data-tab="hourly"')}>Hourly</div><div class="tab tap${tab === 'daily' ? ' on' : ''}" ${this._btn('tab', 'data-tab="daily"')}>${m.days.length} days</div></div>` : ''}
+      ${both ? `<div class="tabs"><div class="tab tap${tab === 'hourly' ? ' on' : ''}" ${this._btn('tab', 'data-tab="hourly"')}>Hourly</div><div class="tab tap${tab === 'daily' ? ' on' : ''}" ${this._btn('tab', 'data-tab="daily"')}>Daily</div></div>` : ''}
       ${tab === 'hourly' && c.show_hourly ? hourly : ''}
       ${tab === 'daily' && c.show_daily ? `<div class="days">${this._dayRows(m, false)}</div>` : ''}`;
+  }
+
+  _condensed(m) {
+    const c = this._config, fh = this._filteredHours(m);
+    const hourly = c.show_hourly ? `${this._dayFilter != null ? `<div class="h"><span>Hourly</span>${this._clearChip(m)}</div>` : ''}${fh.note ? `<div class="note">${fh.note}</div>` : this._strip(fh.hours, false)}` : '';
+    const daily = c.show_daily && m.days.length ? `<div class="drow">${m.days.map(d => `<div class="dt tap${this._dayFilter === d.i ? ' sel' : ''}" ${this._btn('day', `data-i="${d.i}"`)}><span class="dn">${esc(d.dn)}</span>${this._icon(d.icon, 't-' + d.tone)}<span class="hl"><b>${r(d.hi)}°</b> <span>${r(d.lo)}°</span></span><span class="pop">${this._popTxt(d.pop)}</span></div>`).join('')}</div>` : '';
+    return `
+      ${this._head(m, false)}
+      ${m.stats.length ? `<div class="chips">${m.stats.map(s => `<div class="chip">${this._icon(s.icon).replace('<ha-icon', `<ha-icon style="color:${s.chipColor}"`)}${esc(s.chip)}</div>`).join('')}</div>` : ''}
+      ${this._alertBar(m)}
+      ${!m.alerts.length && m.nowcast ? `<div class="cnow">${this._icon('mdi:umbrella-outline')}${esc(m.nowcast.title)}${m.nowcast.sub ? ' · ' + esc(m.nowcast.sub) : ''}</div>` : ''}
+      ${hourly}${daily}`;
   }
 
   // ---------- interaction ----------
@@ -495,7 +530,7 @@ const STAT_OPTIONS = [
 const SCHEMA = [
   { name: 'entity', required: true, selector: { entity: { domain: 'weather' } } },
   { type: 'grid', name: '', schema: [
-    { name: 'layout', selector: { select: { mode: 'dropdown', options: [{ value: 'auto', label: 'Auto (fit to width)' }, { value: 'full', label: 'Full stack' }, { value: 'wide', label: 'Wide panel' }, { value: 'compact', label: 'Compact' }] } } },
+    { name: 'layout', selector: { select: { mode: 'dropdown', options: [{ value: 'auto', label: 'Auto (fit to width)' }, { value: 'full', label: 'Full stack' }, { value: 'wide', label: 'Wide panel' }, { value: 'condensed', label: 'Condensed (wide, short)' }, { value: 'compact', label: 'Compact' }] } } },
     { name: 'theme', selector: { select: { mode: 'dropdown', options: [{ value: 'auto', label: 'Follow HA theme' }, { value: 'dark', label: 'Always dark' }, { value: 'light', label: 'Always light' }] } } },
   ] },
   { name: 'name', selector: { text: {} } },
@@ -503,6 +538,7 @@ const SCHEMA = [
     { name: 'aqi_entity', selector: { entity: { domain: 'sensor' } } },
     { name: 'alerts_entity', selector: { entity: { domain: 'sensor' } } },
     { name: 'nowcast_entity', selector: { entity: { domain: 'sensor' } } },
+    { name: 'uv_entity', selector: { entity: { domain: 'sensor' } } },
     { type: 'grid', name: '', schema: [
       { name: 'storm_distance_entity', selector: { entity: { domain: 'sensor' } } },
       { name: 'storm_bearing_entity', selector: { entity: { domain: 'sensor' } } },
@@ -523,7 +559,7 @@ const SCHEMA = [
 ];
 const LABELS = {
   entity: 'Weather entity', layout: 'Layout', theme: 'Theme', name: 'Location label',
-  aqi_entity: 'Air quality sensor', alerts_entity: 'NWS Alerts sensor', nowcast_entity: 'Minutely summary sensor (Pirate Weather)',
+  aqi_entity: 'Air quality sensor', alerts_entity: 'NWS Alerts sensor', nowcast_entity: 'Minutely summary sensor (Pirate Weather)', uv_entity: 'UV index sensor',
   storm_distance_entity: 'Nearest storm distance', storm_bearing_entity: 'Nearest storm bearing',
   show_clock: 'Clock', show_alerts: 'Alerts', show_nowcast: 'Rain nowcast', show_stats: 'Stat tiles', show_hourly: 'Hourly', show_daily: 'Daily',
   hourly_count: 'Hours to show', daily_count: 'Days to show', stats: 'Stats to show (in order)',
@@ -531,7 +567,8 @@ const LABELS = {
 const HELPERS = {
   name: 'Leave empty to use your Home Assistant location name',
   nowcast_entity: 'Optional. Enable "minutely summary" in Pirate Weather options; otherwise the card estimates from the hourly forecast',
-  layout: 'Auto uses Wide when the card is at least 720px wide',
+  layout: 'Auto uses Wide when the card is at least 720px wide. Condensed fits short spaces',
+  uv_entity: 'Optional. Pirate Weather has no current UV on the weather entity, so without this the card uses the current hour of the forecast',
 };
 
 class WeatherGlanceCardEditor extends HTMLElement {

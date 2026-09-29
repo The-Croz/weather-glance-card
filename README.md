@@ -10,7 +10,7 @@ Built for [Pirate Weather](https://github.com/Pirate-Weather/pirate-weather-ha),
 
 ## Features
 
-- **Three layouts** — **Full stack**, **Wide panel**, **Compact** — or **Auto**, which switches to Wide when the card is at least 720px wide
+- **Four layouts** — **Full stack**, **Wide panel**, **Condensed** (wide but short — great for tablet dashboards), **Compact** — or **Auto**, which switches to Wide when the card is at least 720px wide
 - **Follows your HA theme** (light/dark), or force either one
 - **Severe weather alerts** from NWS Alerts, color-coded by level, with full alert text in a popup
 - **Rain nowcast** — "Rain likely around 3PM" — from Pirate Weather's minutely summary, or estimated from the hourly forecast
@@ -60,6 +60,7 @@ layout: auto
 aqi_entity: sensor.waqi_aqi
 alerts_entity: sensor.nws_alerts
 nowcast_entity: sensor.pirateweather_minutely_summary
+uv_entity: sensor.pirateweather_uv_index
 stats:
   - humidity
   - aqi
@@ -77,7 +78,8 @@ All sources except the weather entity are optional; sections without data simply
 |---|---|
 | Weather entity | [Pirate Weather](https://github.com/Pirate-Weather/pirate-weather-ha) or any weather integration with forecasts |
 | Air quality sensor | Any AQI sensor (e.g. [WAQI](https://www.home-assistant.io/integrations/waqi/)) — shown with US EPA color bands |
-| NWS Alerts sensor | [NWS Alerts](https://github.com/finity69x2/nws_alerts) integration (e.g. `sensor.nws_alerts`) — US only |
+| NWS Alerts sensor | The **[NWS Alerts](https://github.com/finity69x2/nws_alerts) custom integration** (install via HACS), e.g. `sensor.nws_alerts` — US only. The built-in [National Weather Service](https://www.home-assistant.io/integrations/nws) integration does **not** provide alerts |
+| UV index sensor | Pirate Weather → Configure → enable the UV Index sensor. Pirate Weather's weather entity has no current UV, so without this sensor the card uses the current hour of the forecast |
 | Minutely summary | Pirate Weather → Configure → enable the minutely summary sensor. Without it, the nowcast is estimated from the hourly forecast |
 | Nearest storm distance / bearing | Pirate Weather sensors — shown alongside active alerts |
 
@@ -87,11 +89,12 @@ All sources except the weather entity are optional; sections without data simply
 |---|---|---|---|
 | `entity` | string | **required** | Weather entity |
 | `name` | string | HA location name | Location label shown next to the clock |
-| `layout` | string | `auto` | `auto`, `full`, `wide` or `compact` |
+| `layout` | string | `auto` | `auto`, `full`, `wide`, `condensed` or `compact` |
 | `theme` | string | `auto` | `auto` (follow HA), `dark` or `light` |
 | `aqi_entity` | string | — | Air quality sensor |
 | `alerts_entity` | string | — | NWS Alerts sensor |
 | `nowcast_entity` | string | — | Pirate Weather minutely summary sensor |
+| `uv_entity` | string | — | UV index sensor (falls back to the weather entity, then the hourly forecast) |
 | `storm_distance_entity` | string | — | Nearest storm distance sensor |
 | `storm_bearing_entity` | string | — | Nearest storm bearing sensor |
 | `show_clock` | boolean | `true` | Show the clock and date |
@@ -110,11 +113,14 @@ All sources except the weather entity are optional; sections without data simply
 - **Tap an alert** → full alert text (areas, details, what to do, link to the full alert)
 - **Tap a day** → that day's hourly forecast (hourly data typically covers ~48 hours)
 - **Compact layout** → switch between Hourly and Daily with the tabs
+- **Wide / Condensed** → tapping a day filters the hourly forecast to that day; tap ✕ to clear
 
 ## Troubleshooting
 
 - **"Custom element doesn't exist: weather-glance-card"** — the resource isn't loaded. Check it's listed under Settings → Dashboards → Resources, then hard-refresh the browser. On the mobile app, reset the frontend cache from the Companion app's debugging/troubleshooting settings.
 - **"Hourly forecast unavailable"** — your weather entity doesn't provide an hourly forecast. Check its forecast support, or hide the section with `show_hourly: false`.
+- **UV index missing** — pick a UV sensor under Data sources, or make sure your weather entity provides an hourly forecast.
+- **No alerts sensor to choose** — install the [NWS Alerts](https://github.com/finity69x2/nws_alerts) custom integration; the built-in NWS integration has no alerts.
 - **Check the installed version** — open the browser console; the card logs `WEATHER-GLANCE-CARD vX.Y.Z` on load.
 
 ## License
